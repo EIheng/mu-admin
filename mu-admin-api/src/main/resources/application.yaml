@@ -1,0 +1,11 @@
+server:
+  port: 9908
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 500KB
+      max-request-size: 1MB
+
+sa-token:
+  is-read-cookie: false
