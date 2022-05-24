@@ -1,3 +1,5 @@
+import { TokenInfo } from "@/api/model/vo";
+
 /**
  * window.localStorage 浏览器永久缓存
  * @method set 设置永久缓存
@@ -5,7 +7,7 @@
  * @method remove 移除永久缓存
  * @method clear 移除全部永久缓存
  */
- export const local = {
+export const LocalUtil = {
 	// 设置永久缓存
 	set(key: string, val: any) {
 		window.localStorage.setItem(key, JSON.stringify(val));
@@ -32,7 +34,7 @@
  * @method remove 移除临时缓存
  * @method clear 移除全部临时缓存
  */
-export const session = {
+export const SessionUtil = {
 	// 设置临时缓存
 	set(key: string, val: any) {
 		window.sessionStorage.setItem(key, JSON.stringify(val));
@@ -51,3 +53,19 @@ export const session = {
 		window.sessionStorage.clear();
 	},
 };
+
+/**
+ * 获取token信息
+ * @returns token信息，可能为null
+ */
+export function getTokenInfo(): TokenInfo {
+	try {
+		return LocalUtil.get("tokenInfo");
+	} catch (error) {
+		return { tokenName: "token", tokenValue: "" };
+	}
+}
+
+export function clearToken() {
+	LocalUtil.remove("token")
+}

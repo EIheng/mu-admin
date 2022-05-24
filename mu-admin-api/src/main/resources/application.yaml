@@ -1,11 +1,18 @@
 server:
-  port: 9908
+    port: 9908
 
 spring:
-  servlet:
-    multipart:
-      max-file-size: 500KB
-      max-request-size: 1MB
-
+    datasource:
+        url: jdbc:mysql://localhost:3306/mu_admin
+        username: root
+        password: 123456
+    servlet:
+        multipart:
+            max-file-size: 3MB
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
 sa-token:
-  is-read-cookie: false
+    is-read-cookie: false
+    token-name: token
+

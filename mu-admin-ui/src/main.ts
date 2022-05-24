@@ -1,17 +1,18 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
-import { store, key } from './store'
-
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
-import App from './App.vue'
-import router from './router';
+import App from './app.vue'
+import router from './router'
+import { createPinia } from 'pinia'
+const app = createApp(App)
 
-const app = createApp(App);
+app.use(ElementPlus)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component("Element" + key, component)
+}
+app.use(router)
+app.use(createPinia())
 
-app.use(ElementPlus, {locale: zhCn});
-app.use(router);
-app.use(store, key)
-
-app.mount('#app');
+app.mount('#app')

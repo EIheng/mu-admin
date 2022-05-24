@@ -1,7 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import routes from './routes'
-import { session } from '@/util/sessionStorageUtil';
-import { TokenInfo } from '@/api/loginAPI';
+import { createRouter, createWebHistory, RouteLocationRaw } from 'vue-router';
+import { routes } from './routes'
+import { clearToken, getTokenInfo } from '@/util/sessionStorageUtil';
 
 const routerHistory = createWebHistory();
 
@@ -10,26 +9,20 @@ const router = createRouter({
     routes: routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from): RouteLocationRaw | void => {
 
-    if (to.meta.title) {
-        document.title = to.meta.title as string
-    }
-    const tokenInfo: TokenInfo = session.get("tokenInfo");
+    const tokenValue = getTokenInfo();
 
-    if (to.path === '/login' && !tokenInfo) {
-        next();
-    } else {
-        if (!tokenInfo) {
-            session.clear();
-            next('/login');
-        } else if (to.path === '/login' && tokenInfo) {
-            next('/');
-        } else {
-            next();
+    if (!tokenValue && to.path !== '/login') {
+        return {
+            params: {
+                msg: "登录凭证失效，请重新登录！"
+            },
+            path: "/login"
         }
+    } else if (to.meta.title) {
+        document.title = to.name?.toString() + "-后台管理系统";
     }
-
 })
 
 export default router

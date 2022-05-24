@@ -3,10 +3,6 @@ package com.mudongheng.app;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * @author 幕冬
- * @since 2021年10月24日
- */
 @SpringBootApplication
 public class Application {
 

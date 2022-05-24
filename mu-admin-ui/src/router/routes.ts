@@ -1,38 +1,68 @@
 import { RouteRecordRaw } from 'vue-router';
 
-
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/login',
-        name: 'login',
-        meta: { title: "登录-后台管理系统" },
+        name: '登录',
+        meta: { icon: "", disabled: false },
         component: () => import('@/view/Login.vue'),
     },
     {
         path: '/',
-        name: '',
-        component: () => import('@/layout/Main.vue'),
+        name: '菜单',
+        component: () => import('@/layout/index.vue'),
+        redirect: '/home',
         children: [
             {
-                path: '/',
+                path: '/home',
                 name: '首页',
-                meta: { title: "首页-后台管理系统" },
-                component: () => import('@/view/Home.vue'),
+                meta: { icon: "element-home-filled", disabled: false },
+                component: () => import('@/view/home.vue'),
             },
             {
-                path: '/file',
-                name: '文件管理',
-                meta: { title: "文件管理-后台管理系统" },
-                component: () => import('@/view/FileManage.vue'),
+                path: '/user',
+                name: '用户管理',
+                meta: { icon: "element-user", disabled: false },
+                component: () => import('@/view/user.vue'),
             },
             {
-                path: '/gallery',
-                name: '图片管理',
-                meta: { title: "画廊-后台管理系统" },
-                component: () => import('@/view/Gallery.vue'),
+                path: '/role',
+                name: '权限管理',
+                meta: { icon: "element-key", disabled: false },
+                component: () => import('@/view/sub.vue'),
+                redirect: "/role",
+                children: [
+                    {
+                        path: '/role',
+                        name: '用户角色',
+                        meta: { icon: "element-avatar", disabled: false },
+                        component: () => import('@/view/role.vue'),
+                    },
+                    {
+                        path: '/permission',
+                        name: '角色权限',
+                        meta: { icon: "element-view", disabled: false },
+                        component: () => import('@/view/permission.vue'),
+                    },
+                ]
+            },
+            {
+                path: '/staff',
+                name: '员工管理',
+                meta: { icon: "element-briefcase", disabled: true },
+                component: () => import('@/view/home.vue'),
+            },
+            {
+                path: '/order',
+                name: '订单管理',
+                meta: { icon: "element-list", disabled: true },
+                component: () => import('@/view/home.vue'),
             },
         ],
     },
 ]
 
-export default routes;
+
+export {
+    routes
+};
