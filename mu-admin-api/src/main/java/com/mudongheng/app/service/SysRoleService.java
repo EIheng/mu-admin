@@ -31,6 +31,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
     public RoleVO getVO(SysRole sysRole) {
         return new RoleVO(
                 sysRole.getId(),
+                sysRole.getRoleName(),
                 sysRole.getRoleNote()
         );
     }

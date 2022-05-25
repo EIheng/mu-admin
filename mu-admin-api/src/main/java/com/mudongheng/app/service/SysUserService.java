@@ -43,4 +43,16 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         );
     }
 
+    public SysRole getRoleByUserId(int id) {
+        SysUser sysUser = getById(id);
+        if (sysUser == null) {
+            throw new ParamException("用户不存在！");
+        }
+        SysRole sysRole = sysRoleMapper.selectOne(new QueryWrapper<SysRole>().eq("id", sysUser.getSysRoleId()));
+        if (sysRole == null) {
+            throw new ParamException("用户所对应角色不存在！");
+        }
+        return sysRole;
+    }
+
 }

@@ -25,6 +25,7 @@ export interface SysUserVO {
 export interface RoleVO {
     id: number
     roleName: string
+    roleNote: string
 }
 
 export interface PermissionVO {

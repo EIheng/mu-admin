@@ -1,5 +1,7 @@
 package com.mudongheng.app.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -9,8 +11,8 @@ import com.mudongheng.app.exception.ParamException;
 import com.mudongheng.app.model.entity.BaseEntity;
 import com.mudongheng.app.model.entity.SysRole;
 import com.mudongheng.app.model.entity.SysUser;
+import com.mudongheng.app.model.params.IdParam;
 import com.mudongheng.app.model.params.PageSysUserParam;
-import com.mudongheng.app.model.params.UserIdParam;
 import com.mudongheng.app.model.params.UserInsertParam;
 import com.mudongheng.app.model.params.UserUpdateParam;
 import com.mudongheng.app.model.vo.DataResult;
@@ -18,6 +20,7 @@ import com.mudongheng.app.model.vo.SysUserVO;
 import com.mudongheng.app.service.SysRoleService;
 import com.mudongheng.app.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +36,7 @@ import java.util.List;
  * @since 2022年05月23日
  */
 @Slf4j
+@SaCheckLogin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -41,9 +45,12 @@ public class UserController {
 
     private final SysRoleService sysRoleService;
 
-    public UserController(SysUserService sysUserService, SysRoleService sysRoleService) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserController(SysUserService sysUserService, SysRoleService sysRoleService, PasswordEncoder passwordEncoder) {
         this.sysUserService = sysUserService;
         this.sysRoleService = sysRoleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/get-my-user-info")
@@ -72,23 +79,27 @@ public class UserController {
         }
         Page<SysUser> page = sysUserService.page(new Page<>(param.cur(), 10), qw);
         List<SysUserVO> resList = page.getRecords().stream().map(sysUserService::getVO).toList();
-        Page<SysUserVO> sysUserVOPage = new Page<>(param.cur(), 10);
+        Page<SysUserVO> sysUserVOPage = new Page<>(param.cur(), 10, page.getTotal());
         sysUserVOPage.setRecords(resList);
         log.info("用户 {} 分页查询用户信息：{} ，共查询数据：{} 条", StpUtil.getLoginId(), param, resList.size());
         return DataResult.ok(sysUserVOPage);
     }
 
     @PostMapping("/insert")
+    @SaCheckPermission("sys-user-insert")
     public DataResult<Object> insert(@Validated @RequestBody UserInsertParam param) {
         SysRole sysRole = sysRoleService.getByRoleNote(param.roleName());
         SysUser sysUser = new SysUser();
         sysUser.setSysRoleId(sysRole.getId());
         sysUser.setUsername(param.username());
+        sysUser.setPassword(passwordEncoder.encode(param.password()));
         sysUserService.save(sysUser);
+        log.info("用户 {} 创建用户：{}", StpUtil.getLoginId(), sysUser);
         return DataResult.ok();
     }
 
     @PostMapping("/update")
+    @SaCheckPermission("sys-user-update")
     public DataResult<Object> update(@Validated @RequestBody UserUpdateParam param) {
         if (param.id() == -1) {
             return DataResult.error();
@@ -107,9 +118,10 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public DataResult<Object> delete(@Validated @RequestBody UserIdParam param) {
+    @SaCheckPermission("sys-user-delete")
+    public DataResult<Object> delete(@Validated @RequestBody IdParam param) {
         Object loginId = StpUtil.getLoginId();
-        if (!sysUserService.removeById(param.userId())) {
+        if (!sysUserService.removeById(param.id())) {
             log.error("用户 {} 视图删除不存在用户：{}", loginId, param);
             return DataResult.error("该用户不存在");
         } else {

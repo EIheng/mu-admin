@@ -10,8 +10,8 @@ import { UserFilled, Unlock } from "@element-plus/icons-vue";
 const router = useRouter();
 const route = useRoute();
 
-if (typeof route.params['msg'] == "string") {
-  ElMessage.warning(route.params['msg'])
+if (typeof route.query['msg'] == "string") {
+  ElMessage.warning(route.query['msg'])
 }
 
 const loginForm = {

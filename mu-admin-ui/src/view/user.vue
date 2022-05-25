@@ -47,7 +47,8 @@ const insertForm = {
     visible: false,
     form: {
       username: "",
-      roleName: ""
+      roleName: "",
+      password: ""
     }
   }),
   open: () => {
@@ -92,6 +93,18 @@ const openUpdateDialog = (sysUserVO: SysUserVO) => {
   updateDialogVisible.value = true
 }
 
+// 删除
+const deleteRequest = (id: number) => {
+  UserRequest.delete({ id }).then(res => {
+    if (res.data.state) {
+      submitPage()
+      ElMessage.success(res.data.msg)
+    } else {
+      ElMessage.warning(res.data.msg)
+    }
+  })
+}
+
 submitPage()
 </script>
 
@@ -101,6 +114,9 @@ submitPage()
     <el-form :model="insertForm.dialogData.form" label-width="120px">
       <el-form-item label="用户名">
         <el-input v-model="insertForm.dialogData.form.username" />
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="insertForm.dialogData.form.password" />
       </el-form-item>
       <el-form-item label="角色">
         <el-input v-model="insertForm.dialogData.form.roleName" />
@@ -137,7 +153,7 @@ submitPage()
           <template #header>
             <div class="card-header">
               <span>用户管理</span>
-              <el-button class="button" @click="insertForm.open()">创建用户</el-button>
+              <el-button class="button" @click="insertForm.open()">创建</el-button>
             </div>
           </template>
 
@@ -163,7 +179,11 @@ submitPage()
             <el-table-column label="操作">
               <template #default="scope">
                 <el-button size="small" @click="openUpdateDialog(scope.row)">编辑</el-button>
-                <el-button type="danger" size="small">删除</el-button>
+                <el-popconfirm title="确认删除？" icon-color="red" @confirm="deleteRequest(scope.row.id)">
+                  <template #reference>
+                    <el-button type="danger" size="small">删除</el-button>
+                  </template>
+                </el-popconfirm>
               </template>
             </el-table-column>
           </el-table>

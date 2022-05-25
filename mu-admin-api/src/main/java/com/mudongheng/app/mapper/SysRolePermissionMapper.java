@@ -1,7 +1,6 @@
 package com.mudongheng.app.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.mudongheng.app.model.entity.SysPermission;
 import com.mudongheng.app.model.entity.SysRolePermission;
 import org.apache.ibatis.annotations.Mapper;
 
