@@ -86,9 +86,13 @@ public class UserController {
     }
 
     @PostMapping("/insert")
-    @SaCheckPermission("sys-user-insert")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> insert(@Validated @RequestBody UserInsertParam param) {
-        SysRole sysRole = sysRoleService.getByRoleNote(param.roleName());
+        SysRole sysRole = sysRoleService.getById(param.roleId());
+        if (sysRole ==  null) {
+            log.error("用户 {} 查询不存在角色：{}", StpUtil.getLoginId(), param);
+            throw new ParamException("此角色名不存在，请检查输入内容！");
+        }
         SysUser sysUser = new SysUser();
         sysUser.setSysRoleId(sysRole.getId());
         sysUser.setUsername(param.username());
@@ -99,7 +103,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @SaCheckPermission("sys-user-update")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> update(@Validated @RequestBody UserUpdateParam param) {
         if (param.id() == -1) {
             return DataResult.error();
@@ -107,7 +111,11 @@ public class UserController {
 
         sysUserService.isExist(param.id());
 
-        SysRole sysRole = sysRoleService.getByRoleNote(param.roleName());
+        SysRole sysRole = sysRoleService.getById(param.roleId());
+        if (sysRole ==  null) {
+            log.error("用户 {} 查询不存在角色：{}", StpUtil.getLoginId(), param);
+            throw new ParamException("此角色名不存在，请检查输入内容！");
+        }
 
         UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", param.id()).set("username", param.username()).set("sys_role_id", sysRole.getId());
@@ -118,7 +126,7 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    @SaCheckPermission("sys-user-delete")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> delete(@Validated @RequestBody IdParam param) {
         Object loginId = StpUtil.getLoginId();
         if (!sysUserService.removeById(param.id())) {

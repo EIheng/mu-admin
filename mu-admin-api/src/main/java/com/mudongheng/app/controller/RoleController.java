@@ -58,13 +58,19 @@ public class RoleController {
         this.permissionComponent = permissionComponent;
     }
 
+    @PostMapping("/list")
+    public DataResult<List<RoleVO>> list() {
+        List<RoleVO> voList = sysRoleService.list().stream().map(sysRoleService::getVO).toList();
+        return DataResult.ok(voList);
+    }
+
     @PostMapping("/page")
     public DataResult<Page<RoleVO>> page(@Validated @RequestBody RolePageParam param) {
         // 1. 获取分页查询的角色信息
         QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(param.id() != null, "id", param.id())
                 .like(StrUtil.isNotEmpty(param.roleName()), "role_name", param.roleName())
-                .like(StrUtil.isNotEmpty(param.roleNote()),"role_note", param.roleNote());
+                .like(StrUtil.isNotEmpty(param.roleNote()), "role_note", param.roleNote());
         Page<SysRole> page = sysRoleService.page(new Page<>(param.cur(), 10), queryWrapper);
         List<RoleVO> voList = page.getRecords().stream().map(sysRoleService::getVO).toList();
         Page<RoleVO> voPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
@@ -74,6 +80,7 @@ public class RoleController {
     }
 
     @PostMapping("/list-role-permission-by-id")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<List<PermissionVO>> listRolePermissionById(@Validated @RequestBody IdParam param) {
         List<PermissionVO> voList = sysPermissionService.listByRoleId(param.id());
         log.info("用户 {} 查询 {} 的权限，共有 {} 条权限", StpUtil.getLoginId(), param.id(), voList.size());
@@ -81,7 +88,7 @@ public class RoleController {
     }
 
     @PostMapping("/insert")
-    @SaCheckPermission("sys-role-insert")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> insert(@Validated @RequestBody RoleInsertParam param) {
         SysRole sysRole = new SysRole();
         sysRole.setRoleName(param.roleName());
@@ -92,7 +99,7 @@ public class RoleController {
     }
 
     @PostMapping("/update")
-    @SaCheckPermission("sys-role-update")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> update(@Validated @RequestBody RoleUpdateParam param) {
         if (param.id() == -1) {
             return DataResult.error();
@@ -112,7 +119,7 @@ public class RoleController {
     }
 
     @PostMapping("/update-permission")
-    @SaCheckPermission("sys-role-permission-update")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> updatePermission(@Validated @RequestBody RoleUpdatePermissionParam param) {
         // 1. 参数校验
         SysRole sysRole = sysRoleService.getById(param.roleId());
@@ -159,7 +166,7 @@ public class RoleController {
     }
 
     @PostMapping("/delete")
-    @SaCheckPermission("sys-role-delete")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> delete(@Validated @RequestBody IdParam param) {
         Object loginId = StpUtil.getLoginId();
         if (!sysRoleService.removeById(param.id())) {

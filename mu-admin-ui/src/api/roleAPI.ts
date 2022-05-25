@@ -4,6 +4,12 @@ import { DataResult, Page, RoleVO } from "./model/vo";
 
 
 export const RoleRequest = {
+    list(): AxiosPromise<DataResult<RoleVO[]>> {
+        return request({
+            url: "/role/list",
+            method: "POST"
+        })
+    },
     page(data: {
         cur: number,
         id: number | null,

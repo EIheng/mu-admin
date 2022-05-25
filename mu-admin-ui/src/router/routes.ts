@@ -49,14 +49,14 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/staff',
                 name: '员工管理',
-                meta: { icon: "element-briefcase", disabled: true },
-                component: () => import('@/view/home.vue'),
+                meta: { icon: "element-briefcase", disabled: false },
+                component: () => import('@/view/staff.vue'),
             },
             {
                 path: '/order',
                 name: '订单管理',
-                meta: { icon: "element-list", disabled: true },
-                component: () => import('@/view/home.vue'),
+                meta: { icon: "element-list", disabled: false },
+                component: () => import('@/view/order.vue'),
             },
         ],
     },

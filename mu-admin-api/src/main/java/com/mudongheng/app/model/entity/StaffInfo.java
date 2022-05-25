@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  * @since 2022年05月23日
  */
 @Data
-@TableName(value ="staff_info")
+@TableName(value = "staff_info")
 @EqualsAndHashCode(callSuper = true)
 public class StaffInfo extends BaseEntity {
 

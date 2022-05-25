@@ -20,6 +20,7 @@ public class SysRolePermissionService extends ServiceImpl<SysRolePermissionMappe
 
     /**
      * 该角色已有的权限，注意只包含记录id与权限id
+     *
      * @param roleId 权限id
      * @return 权限列表
      */
@@ -31,8 +32,9 @@ public class SysRolePermissionService extends ServiceImpl<SysRolePermissionMappe
 
     /**
      * 将权限id列表转换为角色权限存入数据库
+     *
      * @param roleId 角色id
-     * @param list 列表
+     * @param list   列表
      */
     public void addAllPermission(int roleId, Collection<Integer> list) {
         if (list.isEmpty()) {

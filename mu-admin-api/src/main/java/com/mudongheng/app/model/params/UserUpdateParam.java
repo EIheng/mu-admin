@@ -12,7 +12,7 @@ public record UserUpdateParam(
         Integer id,
         @NotBlank(message = "不能为空")
         String username,
-        @NotBlank(message = "不能为空")
-        String roleName
+        @NotNull
+        Integer roleId
 ) {
 }

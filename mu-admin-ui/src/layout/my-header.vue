@@ -13,10 +13,10 @@ function logout() {
 
 <template>
   <el-row style="height: 100%;">
-    <el-col :span="12" class="flex-left">
+    <el-col :span="20" class="flex-left">
       <nav-menu class="nav-menu" />
     </el-col>
-    <el-col :span="12" class="flex-right">
+    <el-col :span="4" class="flex-right">
       <el-dropdown>
         <span class="el-dropdown-link">
           <el-icon class="setting">

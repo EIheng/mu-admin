@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  * @since 2022年05月23日
  */
 @Data
-@TableName(value ="sys_role_permission")
+@TableName(value = "sys_role_permission")
 @EqualsAndHashCode(callSuper = true)
 public class SysRolePermission extends BaseEntity {
 

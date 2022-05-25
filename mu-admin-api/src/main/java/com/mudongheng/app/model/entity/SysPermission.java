@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  * @since 2022年05月22日
  */
 @Data
-@TableName(value ="sys_permission")
+@TableName(value = "sys_permission")
 @EqualsAndHashCode(callSuper = true)
 public class SysPermission extends BaseEntity {
 

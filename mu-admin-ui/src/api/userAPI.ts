@@ -24,7 +24,7 @@ export const UserRequest = {
     },
     insert(data: {
         username: string,
-        roleName: string
+        roleId: number
     }): AxiosPromise<DataResult<null>> {
         return request({
             url: "/user/insert",
@@ -35,7 +35,7 @@ export const UserRequest = {
     update(data: {
         id: number,
         username: string,
-        roleName: string
+        roleId: number
     }): AxiosPromise<DataResult<null>> {
         return request({
             url: "/user/update",

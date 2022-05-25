@@ -2,7 +2,6 @@ package com.mudongheng.app.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -53,7 +52,7 @@ public class PermissionController {
         QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(param.id() != null, "id", param.id())
                 .like(StrUtil.isNotEmpty(param.permissionName()), "permission_name", param.permissionName())
-                .like(StrUtil.isNotEmpty(param.permissionNote()),"permission_note", param.permissionNote());
+                .like(StrUtil.isNotEmpty(param.permissionNote()), "permission_note", param.permissionNote());
         Page<SysPermission> sysPermissionPage = sysPermissionService.page(new Page<>(param.cur(), 10), queryWrapper);
         Page<PermissionVO> resPage = new Page<>(sysPermissionPage.getCurrent(), sysPermissionPage.getSize(), sysPermissionPage.getTotal());
         List<PermissionVO> resList = sysPermissionPage.getRecords().stream().map(sysPermissionService::getVO).toList();
@@ -63,7 +62,7 @@ public class PermissionController {
     }
 
     @PostMapping("/insert")
-    @SaCheckRole("root")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> insert(@Validated @RequestBody PermissionInsertParam param) {
         SysPermission sysPermission = new SysPermission();
         sysPermission.setPermissionName(param.permissionName());
@@ -74,7 +73,7 @@ public class PermissionController {
     }
 
     @PostMapping("/update")
-    @SaCheckRole("root")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> update(@Validated @RequestBody PermissionUpdateParam param) {
         if (param.id() == -1) {
             return DataResult.error();
@@ -95,7 +94,7 @@ public class PermissionController {
     }
 
     @PostMapping("/delete")
-    @SaCheckRole("root")
+    @SaCheckPermission(value = "sys-operate", orRole = "root")
     public DataResult<Object> delete(@Validated @RequestBody IdParam param) {
         Object loginId = StpUtil.getLoginId();
         if (!sysPermissionService.removeById(param.id())) {

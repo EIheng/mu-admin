@@ -30,6 +30,7 @@ public class AuthController {
 
     /**
      * 登录
+     *
      * @param param 登录表单
      * @return token信息
      */
@@ -40,6 +41,7 @@ public class AuthController {
 
     /**
      * 是否登录
+     *
      * @return 是否登录
      */
     @PostMapping("/is-login")
@@ -49,6 +51,7 @@ public class AuthController {
 
     /**
      * 获取token信息
+     *
      * @return token信息
      */
     @SaCheckLogin
@@ -59,6 +62,7 @@ public class AuthController {
 
     /**
      * 登出
+     *
      * @return 信息
      */
     @SaCheckLogin

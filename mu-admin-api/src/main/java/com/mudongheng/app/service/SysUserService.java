@@ -27,7 +27,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     }
 
     public void isExist(int id) {
-        long count = count(new QueryWrapper<SysUser>().eq("id", id));
+        long count = count(new QueryWrapper<SysUser>().eq("id", id).select("id"));
         if (count < 1) {
             log.error("用户 {} 试图查询异常表单：{}", StpUtil.getLoginId(), id);
             throw new ParamException("用户不存在，请检查输入内容！");

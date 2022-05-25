@@ -57,6 +57,7 @@ public class SysPermissionService extends ServiceImpl<SysPermissionMapper, SysPe
 
     /**
      * 在有些鉴权场景下只知道角色名称而不知道其对应id
+     *
      * @param roleName 角色名称
      * @return 列表
      */
@@ -71,6 +72,7 @@ public class SysPermissionService extends ServiceImpl<SysPermissionMapper, SysPe
     /**
      * 判断一个id列表是否存在于数据库中
      * 不存在则会抛出异常
+     *
      * @param list id列表
      */
     public void isIdListExist(List<Integer> list) {

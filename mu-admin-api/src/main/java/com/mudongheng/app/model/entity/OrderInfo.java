@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  * @since 2022年05月23日
  */
 @Data
-@TableName(value ="order_info")
+@TableName(value = "order_info")
 @EqualsAndHashCode(callSuper = true)
 public class OrderInfo extends BaseEntity {
 

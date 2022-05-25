@@ -35,6 +35,7 @@ public class PermissionComponent implements StpInterface {
 
     /**
      * 在用户角色发生变化时调用
+     *
      * @param loginId 用户id
      */
     public void clearUserRoleSession(int loginId) {
@@ -44,6 +45,7 @@ public class PermissionComponent implements StpInterface {
 
     /**
      * 在角色所包含权限发生变化时调用
+     *
      * @param roleName 角色名称
      */
     public void clearRolePermissionSession(String roleName) {

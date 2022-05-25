@@ -11,5 +11,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrderInfoService extends ServiceImpl<OrderInfoMapper, OrderInfo> {
-    
+
 }

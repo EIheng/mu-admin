@@ -22,7 +22,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
         SysRole sysRole = getOne(
                 new QueryWrapper<SysRole>().eq("role_note", roleNote).select("id"));
         if (sysRole == null) {
-            log.error("用户 {} 试图查询异常表单：{}", StpUtil.getLoginId(), roleNote);
+            log.error("用户 {} 查询不存在角色：{}", StpUtil.getLoginId(), roleNote);
             throw new ParamException("此角色名不存在，请检查输入内容！");
         }
         return sysRole;

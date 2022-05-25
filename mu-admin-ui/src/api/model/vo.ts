@@ -33,3 +33,15 @@ export interface PermissionVO {
     permissionName: string
     permissionNote: string
 }
+
+export interface StaffInfo {
+    id: number
+    staffName: string
+    duty: string
+}
+
+export interface OrderInfo {
+    id: number
+    orderName: string
+    productNum: number
+}

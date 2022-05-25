@@ -1,6 +1,7 @@
 package com.mudongheng.app.model.params;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -14,7 +15,7 @@ public record UserInsertParam(
         @Size(min = 6, max = 32, message = "密码只能为6~32位")
         @NotBlank(message = "密码不能为空")
         String password,
-        @NotBlank(message = "不能为空")
-        String roleName
+        @NotNull
+        Integer roleId
 ) {
 }

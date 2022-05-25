@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  * @since 2022年05月23日
  */
 @Data
-@TableName(value ="sys_role")
+@TableName(value = "sys_role")
 @EqualsAndHashCode(callSuper = true)
 public class SysRole extends BaseEntity {
 

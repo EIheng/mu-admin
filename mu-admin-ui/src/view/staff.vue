@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { Page, PermissionVO, RoleVO } from '@/api/model/vo';
-import { PermissionRequest } from '@/api/permissionAPI';
-import { RoleRequest } from '@/api/roleAPI';
+import { Page, StaffInfo } from '@/api/model/vo';
+import { StaffRequest } from '@/api/staffAPI';
 import { ElMessage } from 'element-plus';
 import { reactive } from 'vue';
 
-
 // 查
-const page = reactive<Page<RoleVO>>({
+const page = reactive<Page<StaffInfo>>({
   records: [],
   total: 0,
   size: 0,
@@ -15,15 +13,15 @@ const page = reactive<Page<RoleVO>>({
 })
 const pageForm = reactive({
   id: null as null | number,
-  roleName: "",
-  roleNote: "",
+  staffName: "",
+  duty: "",
 })
 const onPage = (cur: number = page.current) => {
-  RoleRequest.page({
+  StaffRequest.page({
     cur,
     id: pageForm.id,
-    roleName: pageForm.roleName,
-    roleNote: pageForm.roleNote
+    staffName: pageForm.staffName,
+    duty: pageForm.duty
   }).then(res => {
     if (res.data.state) {
       const data = res.data.data
@@ -41,15 +39,15 @@ const insertForm = {
   dialogData: reactive({
     visible: false,
     form: {
-      roleName: "",
-      roleNote: "",
+      staffName: "",
+      duty: "",
     }
   }),
   open: () => {
     insertForm.dialogData.visible = true
   },
   submit: () => {
-    RoleRequest.insert(insertForm.dialogData.form).then(res => {
+    StaffRequest.insert(insertForm.dialogData.form).then(res => {
       if (res.data.state) {
         ElMessage.success(res.data.msg)
         onPage()
@@ -68,16 +66,16 @@ const updateForm = {
     visible: false,
     form: {
       id: -1,
-      roleName: "",
-      roleNote: "",
+      staffName: "",
+      duty: "",
     }
   }),
-  open: (roleVO: RoleVO) => {
+  open: (roleVO: StaffInfo) => {
     Object.assign(updateForm.dialogData.form, roleVO)
     updateForm.dialogData.visible = true
   },
   submit: () => {
-    RoleRequest.update(updateForm.dialogData.form).then(res => {
+    StaffRequest.update(updateForm.dialogData.form).then(res => {
       if (res.data.state) {
         ElMessage.success(res.data.msg)
         onPage()
@@ -89,48 +87,9 @@ const updateForm = {
   }
 }
 
-// 更权
-const updatePermissionForm = {
-  dialogData: reactive({
-    roleId: -1,
-    visible: false,
-    permissionList: [] as PermissionVO[],
-    checkList: [] as number[],
-  }),
-  open: (roleVO: RoleVO) => {
-    updatePermissionForm.dialogData.roleId = roleVO.id
-    if (updatePermissionForm.dialogData.permissionList.length == 0) {
-      PermissionRequest.list().then(res => {
-        updatePermissionForm.dialogData.permissionList = res.data.data
-        RoleRequest.listRolePermissionById({ id: roleVO.id }).then(res => {
-          updatePermissionForm.dialogData.checkList = res.data.data.map(v => v.id)
-        })
-      })
-    } else {
-      RoleRequest.listRolePermissionById({ id: roleVO.id }).then(res => {
-        updatePermissionForm.dialogData.checkList = res.data.data.map(v => v.id)
-      })
-    }
-    updatePermissionForm.dialogData.visible = true
-  },
-  submit: () => {
-    RoleRequest.updatePermission({
-      roleId: updatePermissionForm.dialogData.roleId,
-      permissionIdList: updatePermissionForm.dialogData.checkList
-    }).then(res => {
-      if (res.data.state) {
-        ElMessage.success(res.data.msg)
-        updatePermissionForm.dialogData.visible = false
-      } else {
-        ElMessage.warning(res.data.msg)
-      }
-    })
-  }
-}
-
 // 删除
 const deleteRequest = (id: number) => {
-  RoleRequest.delete({ id }).then(res => {
+  StaffRequest.delete({ id }).then(res => {
     if (res.data.state) {
       onPage()
       ElMessage.success(res.data.msg)
@@ -143,13 +102,14 @@ onPage()
 </script>
 
 <template>
-  <el-dialog v-model="insertForm.dialogData.visible" title="创建角色" append-to-body>
+
+  <el-dialog v-model="insertForm.dialogData.visible" title="创建员工" append-to-body>
     <el-form :model="insertForm.dialogData.form" label-width="120px">
-      <el-form-item label="角色键值">
-        <el-input v-model="insertForm.dialogData.form.roleName" />
+      <el-form-item label="员工名称">
+        <el-input v-model="insertForm.dialogData.form.staffName" />
       </el-form-item>
-      <el-form-item label="角色名称">
-        <el-input v-model="insertForm.dialogData.form.roleNote" />
+      <el-form-item label="职务">
+        <el-input v-model="insertForm.dialogData.form.duty" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -158,36 +118,21 @@ onPage()
     </template>
   </el-dialog>
 
-  <el-dialog v-model="updateForm.dialogData.visible" title="修改角色" append-to-body>
+  <el-dialog v-model="updateForm.dialogData.visible" title="修改员工" append-to-body>
     <el-form :model="updateForm.dialogData.form" label-width="120px">
       <el-form-item label="id">
         <el-input v-model="updateForm.dialogData.form.id" disabled />
       </el-form-item>
-      <el-form-item label="角色键值">
-        <el-input v-model="updateForm.dialogData.form.roleName" />
+      <el-form-item label="员工名称">
+        <el-input v-model="updateForm.dialogData.form.staffName" />
       </el-form-item>
-      <el-form-item label="角色名称">
-        <el-input v-model="updateForm.dialogData.form.roleNote" />
+      <el-form-item label="职务">
+        <el-input v-model="updateForm.dialogData.form.duty" />
       </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="updateForm.dialogData.visible = false">取消</el-button>
       <el-button type="primary" @click="updateForm.submit()">提交</el-button>
-    </template>
-  </el-dialog>
-
-  <el-dialog v-model="updatePermissionForm.dialogData.visible" title="修改权限" append-to-body>
-    <el-checkbox-group v-model="updatePermissionForm.dialogData.checkList">
-      <div v-for="o in updatePermissionForm.dialogData.permissionList" :key="o.id">
-        <el-checkbox :label="o.id">
-          {{ o.permissionNote }}
-        </el-checkbox>
-      </div>
-
-    </el-checkbox-group>
-    <template #footer>
-      <el-button @click="updatePermissionForm.dialogData.visible = false">取消</el-button>
-      <el-button type="primary" @click="updatePermissionForm.submit()">提交</el-button>
     </template>
   </el-dialog>
 
@@ -197,7 +142,7 @@ onPage()
         <el-card shadow="hover">
           <template #header>
             <div class="card-header">
-              <span>角色管理</span>
+              <span>员工管理</span>
               <el-button class="button" @click="insertForm.open()">创建</el-button>
             </div>
           </template>
@@ -206,11 +151,11 @@ onPage()
             <el-form-item label="id">
               <el-input v-model="pageForm.id" />
             </el-form-item>
-            <el-form-item label="角色键值">
-              <el-input v-model="pageForm.roleName" />
+            <el-form-item label="员工名称">
+              <el-input v-model="pageForm.staffName" />
             </el-form-item>
-            <el-form-item label="角色名称">
-              <el-input v-model="pageForm.roleNote" />
+            <el-form-item label="职务">
+              <el-input v-model="pageForm.duty" />
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onPage()">查询</el-button>
@@ -219,12 +164,11 @@ onPage()
 
           <el-table :data="page.records">
             <el-table-column prop="id" label="id" />
-            <el-table-column prop="roleName" label="角色键值" />
-            <el-table-column prop="roleNote" label="角色名称" />
+            <el-table-column prop="staffName" label="员工名称" />
+            <el-table-column prop="duty" label="员工名称" />
             <el-table-column label="操作">
               <template #default="scope">
                 <el-button size="small" @click="updateForm.open(scope.row)">编辑</el-button>
-                <el-button size="small" @click="updatePermissionForm.open(scope.row)">权限</el-button>
                 <el-popconfirm title="确认删除？" icon-color="red" @confirm="deleteRequest(scope.row.id)">
                   <template #reference>
                     <el-button type="danger" size="small">删除</el-button>
@@ -233,8 +177,10 @@ onPage()
               </template>
             </el-table-column>
           </el-table>
+
           <el-pagination style="justify-content: center;" layout="prev, pager, next" @current-change="onPage"
             :total="page.total" />
+
         </el-card>
       </transition>
     </el-col>

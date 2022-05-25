@@ -1,8 +1,19 @@
 <script setup lang="ts">
-import { Page, SysUserVO } from '@/api/model/vo';
+import { Page, RoleVO, SysUserVO } from '@/api/model/vo';
+import { RoleRequest } from '@/api/roleAPI';
 import { UserRequest } from '@/api/userAPI';
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
+
+// 角色列表，方便选择
+const roleList = ref<RoleVO[]>([])
+RoleRequest.list().then(res => {
+  if (res.data.state) {
+    roleList.value = res.data.data
+  } else {
+    ElMessage.warning(res.data.msg)
+  }
+})
 
 // 查询部分
 const page = reactive<Page<SysUserVO>>({
@@ -47,8 +58,8 @@ const insertForm = {
     visible: false,
     form: {
       username: "",
-      roleName: "",
-      password: ""
+      password: "",
+      roleId: 1
     }
   }),
   open: () => {
@@ -73,7 +84,7 @@ const updateDialogVisible = ref(false)
 const updateForm = reactive({
   id: -1,
   username: "",
-  roleName: ""
+  roleId: 1
 })
 
 const submitUpdateForm = () => {
@@ -89,7 +100,10 @@ const submitUpdateForm = () => {
 }
 
 const openUpdateDialog = (sysUserVO: SysUserVO) => {
-  Object.assign(updateForm, sysUserVO)
+  updateForm.id = sysUserVO.id
+  updateForm.username = sysUserVO.username
+  const f = roleList.value.find(v => v.roleNote === sysUserVO.roleName)
+  updateForm.roleId = f ? f.id : 1
   updateDialogVisible.value = true
 }
 
@@ -119,7 +133,9 @@ submitPage()
         <el-input v-model="insertForm.dialogData.form.password" />
       </el-form-item>
       <el-form-item label="角色">
-        <el-input v-model="insertForm.dialogData.form.roleName" />
+        <el-select v-model="insertForm.dialogData.form.roleId">
+          <el-option v-for="item in roleList" :key="item.id" :label="item.roleNote" :value="item.id" />
+        </el-select>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -137,7 +153,9 @@ submitPage()
         <el-input v-model="updateForm.username" />
       </el-form-item>
       <el-form-item label="角色">
-        <el-input v-model="updateForm.roleName" />
+        <el-select v-model="updateForm.roleId">
+          <el-option v-for="item in roleList" :key="item.id" :label="item.roleNote" :value="item.id" />
+        </el-select>
       </el-form-item>
     </el-form>
     <template #footer>
