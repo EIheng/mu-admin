@@ -22,3 +22,9 @@ pnpm dev
 在数据库中执行sql文件夹（位于mu-admin-api）的中的`.sql`文件。
 
 将项目使用IDEA打开，加载为Gradle项目，启动项目即可。
+
+## 使用
+
+账号：root
+
+密码：123456

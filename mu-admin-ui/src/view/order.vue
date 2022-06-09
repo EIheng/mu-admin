@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Page, OrderInfo } from '@/api/model/vo';
+import type { Page, OrderInfo } from '@/api/model/vo';
 import { OrderRequest } from '@/api/orderAPI';
 import { ElMessage } from 'element-plus';
 import { reactive } from 'vue';

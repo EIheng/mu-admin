@@ -1,6 +1,6 @@
 import { request } from "@/util/requestUtil";
-import { AxiosPromise } from "axios";
-import { DataResult, TokenInfo } from "./model/vo";
+import type { AxiosPromise } from "axios";
+import type { DataResult, TokenInfo } from "./model/vo";
 
 
 export const AuthRequest = {

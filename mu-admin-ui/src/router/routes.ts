@@ -1,11 +1,11 @@
-import { RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/login',
         name: '登录',
         meta: { icon: "", disabled: false },
-        component: () => import('@/view/Login.vue'),
+        component: () => import('@/view/login.vue'),
     },
     {
         path: '/',

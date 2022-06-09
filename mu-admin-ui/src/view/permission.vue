@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Page, PermissionVO } from '@/api/model/vo';
+import type { Page, PermissionVO } from '@/api/model/vo';
 import { PermissionRequest } from '@/api/permissionAPI';
 import { ElMessage } from 'element-plus';
 import { reactive } from 'vue';

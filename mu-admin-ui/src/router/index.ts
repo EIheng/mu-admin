@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory, RouteLocationRaw } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 import { routes } from './routes'
-import { clearToken, getTokenInfo } from '@/util/sessionStorageUtil';
+import { getTokenInfo } from '@/util/sessionStorageUtil'
 
 const routerHistory = createWebHistory();
 
@@ -9,7 +10,7 @@ const router = createRouter({
     routes: routes
 })
 
-router.beforeEach((to, from): RouteLocationRaw | void => {
+router.beforeEach((to): RouteLocationRaw | void => {
 
     const tokenValue = getTokenInfo();
 

@@ -1,4 +1,4 @@
-import { TokenInfo } from "@/api/model/vo";
+import type { TokenInfo } from "@/api/model/vo";
 
 /**
  * window.localStorage 浏览器永久缓存

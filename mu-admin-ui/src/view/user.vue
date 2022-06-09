@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Page, RoleVO, SysUserVO } from '@/api/model/vo';
+import type { Page, RoleVO, SysUserVO } from '@/api/model/vo';
 import { RoleRequest } from '@/api/roleAPI';
 import { UserRequest } from '@/api/userAPI';
 import { ElMessage } from 'element-plus';

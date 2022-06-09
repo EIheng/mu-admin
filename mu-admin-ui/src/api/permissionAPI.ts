@@ -1,6 +1,6 @@
 import { request } from "@/util/requestUtil";
-import { AxiosPromise } from "axios";
-import { DataResult, Page, PermissionVO } from "./model/vo";
+import type { AxiosPromise } from "axios";
+import type { DataResult, Page, PermissionVO } from "./model/vo";
 
 
 export const PermissionRequest = {

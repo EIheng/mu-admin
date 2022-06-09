@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Page, StaffInfo } from '@/api/model/vo';
+import type { Page, StaffInfo } from '@/api/model/vo';
 import { StaffRequest } from '@/api/staffAPI';
 import { ElMessage } from 'element-plus';
 import { reactive } from 'vue';
